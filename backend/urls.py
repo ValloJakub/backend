@@ -9,7 +9,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include('nhlArticles.urls')),
     path('api/', include('users.urls')),
-
 ]
 
 if settings.DEBUG:

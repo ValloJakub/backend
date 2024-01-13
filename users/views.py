@@ -20,7 +20,6 @@ class UserLoginView(APIView):
             email = serializer.validated_data['email']
             password = serializer.validated_data['password']
 
-            # Authenticate the user
             user = authenticate(request, email=email, password=password)
 
             if user:
