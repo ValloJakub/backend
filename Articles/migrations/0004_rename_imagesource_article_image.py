@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('nhlArticles', '0003_alter_article_imagesource'),
+        ('Articles', '0003_alter_article_imagesource'),
     ]
 
     operations = [

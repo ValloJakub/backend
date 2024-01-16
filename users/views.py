@@ -4,11 +4,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from .serializers import RegistrationSerializer, LoginSerializer
+from .models import CustomUser
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 class RegistrationView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
+            email = serializer.validated_data['email']
+
+            # Check if a user with the given email already exists
+            if CustomUser.objects.filter(email=email).exists():
+                return Response({'error': 'User with this email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -32,4 +42,7 @@ class UserLoginView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+    @method_decorator(login_required)
+    def get(self, request):
+        user = request.user
+        return Response({'email': user.email}, status=status.HTTP_200_OK)
