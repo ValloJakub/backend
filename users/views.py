@@ -15,7 +15,7 @@ class RegistrationView(APIView):
         if serializer.is_valid():
             email = serializer.validated_data['email']
 
-            # Check if a user with the given email already exists
+            # Ak používateľ s takým emailom už existuje
             if CustomUser.objects.filter(email=email).exists():
                 return Response({'error': 'User with this email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
 
