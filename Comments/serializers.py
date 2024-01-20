@@ -4,7 +4,7 @@ from .models import Comment
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'created_at', 'author', 'article']
+        fields = ['id', 'content', 'created_at', 'edited_at', 'author', 'article']
 
     def validate_content(self, value):
         if len(value) > 1000:

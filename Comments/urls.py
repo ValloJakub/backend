@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import CommentListCreateView, CommentDetailView
+from .views import CommentListAPIView, CommentDetailAPIView
 
 urlpatterns = [
-     path('comments/', CommentListCreateView.as_view(), name='comment-list-create'),
-     path('comments/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),
+    path('comments/', CommentListAPIView.as_view(), name='comment-list'),
+    path('comments/<int:pk>/', CommentDetailAPIView.as_view(), name='comment-detail'),
 ]
