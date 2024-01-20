@@ -31,7 +31,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-
         #úprava článku
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
