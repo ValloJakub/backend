@@ -1,12 +1,13 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
+from django.http import JsonResponse
 from rest_framework import status
+from rest_framework.decorators import permission_classes, api_view
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from .serializers import RegistrationSerializer, LoginSerializer
+from .serializers import RegistrationSerializer, LoginSerializer, CustomUserSerializer
 from .models import CustomUser
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 
 class RegistrationView(APIView):
@@ -23,26 +24,26 @@ class RegistrationView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UserLoginView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            email = serializer.validated_data['email']
-            password = serializer.validated_data['password']
 
-            user = authenticate(request, email=email, password=password)
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def user_login_view(request):
+    serializer = LoginSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
 
-            if user:
-                login(request, user)
+    email = serializer.validated_data['email']
+    password = serializer.validated_data['password']
 
-                token, _ = Token.objects.get_or_create(user=user)
-                return Response({'token': token.key}, status=status.HTTP_200_OK)
+    user = authenticate(request, username=email, password=password)
+    customUser = CustomUserSerializer(instance=user)
 
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    if user:
+        login(request, user)
+        token, created = Token.objects.get_or_create(user=user)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'token': token.key, 'message': 'Login successful', 'user': customUser.data})
+    else:
+        return JsonResponse({'error': 'Login failed! Email or Password wrong'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @method_decorator(login_required)
-    def get(self, request):
-        user = request.user
-        return Response({'email': user.email}, status=status.HTTP_200_OK)
+
+User = get_user_model()

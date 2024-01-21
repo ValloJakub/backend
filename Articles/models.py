@@ -1,5 +1,8 @@
 from django.db import models
 
+from users.models import CustomUser
+
+
 class Article(models.Model):
     title = models.CharField(max_length=255)
     specification = models.CharField(max_length=50)

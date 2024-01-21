@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from users.models import CustomUser
 
+
 class RegistrationSerializer(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(write_only=True)
 
@@ -15,16 +16,23 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user = CustomUser.objects.create_user(**validated_data)
         return user
 
+
 class LoginSerializer(serializers.Serializer):
-        email = serializers.EmailField()
-        password = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
-        def validate(self, data):
-            email = data.get('email')
-            password = data.get('password')
+    def validate(self, data):
+        email = data.get('email')
+        password = data.get('password')
 
-            if email and password:
-                return data
-            else:
-                raise serializers.ValidationError('Must include "email" and "password".')
+        if email and password:
+            return data
+        else:
+            raise serializers.ValidationError('Must include "email" and "password".')
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'phone_number', 'is_staff', 'is_active', 'date_joined']
 
