@@ -9,5 +9,5 @@ urlpatterns = router.urls
 
 # Endpoint pre odstránenie článku
 urlpatterns += [
-    path('articles/<int:pk>/remove/', ArticleViewSet.as_view({'post': 'remove_article'}), name='remove-article'),
+    path('articles/<int:pk>/remove/', ArticleViewSet.as_view({'delete': 'destroy'}), name='remove-article'),
 ]

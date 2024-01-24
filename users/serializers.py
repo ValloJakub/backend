@@ -32,7 +32,11 @@ class LoginSerializer(serializers.Serializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    admin = serializers.ReadOnlyField(source='is_staff')
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'phone_number', 'is_staff', 'is_active', 'date_joined']
+        fields = ['id', 'email', 'phone_number', 'admin', 'is_active', 'date_joined']
+
+
 
