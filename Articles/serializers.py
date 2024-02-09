@@ -27,10 +27,9 @@ class ArticleSerializer(serializers.ModelSerializer):
     def validate_image(self, value):
         if value is not None:
             try:
-                # Remove the prefix "data:image/png;base64," and decode the base64 representation
+                # Odstráni predponu "data:image/png;base64," a dekóduje base64 reprezentáciu
                 _, data = value.split(',', 1)
                 decoded_image = base64.b64decode(data)
-                # You can add additional checks on the image as needed
             except Exception as e:
                 raise serializers.ValidationError("Invalid base64 image representation.")
         return value
