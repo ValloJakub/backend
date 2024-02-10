@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'Articles',
     'Comments',
+    'FavouriteArticles',
     'corsheaders',
 ]
 
