@@ -9,7 +9,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
-    # Filter - vráti len články NHL
+    # Filter - vráti články podľa kategórie
     def get_queryset(self):
         queryset = Article.objects.all()
         category = self.request.query_params.get('category')
